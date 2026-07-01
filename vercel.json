@@ -1,6 +1,9 @@
 {
-  "rewrites": [
-    { "source": "/landing", "destination": "/landing.html" },
-    { "source": "/((?!landing).*)", "destination": "/index.html" }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "routes": [
+    { "src": "/landing", "dest": "/landing.html" },
+    { "src": "/landing.html", "dest": "/landing.html" },
+    { "src": "/((?!api).*)", "dest": "/index.html" }
   ]
 }
