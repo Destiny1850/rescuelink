@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-forest;
+  }
+}
+
+@layer components {
+  /* Ficha de albergue: la tarjeta base que usan tanto el catálogo público
+     como el inventario del dashboard. El "clip" superior es el detalle de firma. */
+  .kennel-card {
+    @apply relative bg-white rounded-lg shadow-card border border-ink/5 overflow-hidden;
+  }
+
+  .kennel-card::before {
+    content: '';
+    @apply absolute left-1/2 -top-2 h-4 w-10 -translate-x-1/2 rounded-b-full bg-mist/40 z-10;
+  }
+
+  /* Sello rotado tipo rubber-stamp para status urgente/adoptado */
+  .status-stamp {
+    @apply absolute top-3 right-3 z-20 rotate-[-8deg] rounded border-2 px-2 py-0.5
+           font-mono text-xs font-bold uppercase tracking-wider animate-stamp;
+  }
+  .status-stamp--urgent {
+    @apply border-rescue text-rescue bg-rescue/5;
+  }
+  .status-stamp--adopted {
+    @apply border-mist text-mist bg-mist/5;
+  }
+  .status-stamp--foster {
+    @apply border-gold text-gold bg-gold/5;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-forest px-4 py-2.5
+           text-sm font-semibold text-paper transition-colors hover:bg-forest-light
+           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-forest/30 bg-transparent px-4 py-2.5
+           text-sm font-semibold text-forest transition-colors hover:bg-forest/5
+           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest;
+  }
+  .input-field {
+    @apply w-full rounded-md border border-mist/40 bg-white px-3 py-2 text-sm text-ink
+           placeholder:text-mist focus:border-forest focus:outline-none focus:ring-1 focus:ring-forest;
+  }
+  .label-field {
+    @apply mb-1 block text-xs font-semibold uppercase tracking-wide text-mist;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-stamp {
+    animation: none;
+  }
+}
