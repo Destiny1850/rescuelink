@@ -3,7 +3,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { supabase } from '../../../lib/supabaseClient';
 
 // Nombre de usuario del bot — cámbialo por el tuyo
-const BOT_USERNAME = 'TU_BOT_USERNAME';
+const BOT_USERNAME = 'rescuelink_venezuela_bot';
 
 
 export function TelegramChannelPage() {
