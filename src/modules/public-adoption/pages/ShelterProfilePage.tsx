@@ -137,15 +137,16 @@ export function ShelterProfilePage() {
               </div>
             )}
             {shelter.phone && (
-              <div className="ml-auto">
-                <a
-                  href={`tel:${shelter.phone}`}
-                  className="btn-primary !py-1.5 text-xs"
-                >
-                  📞 Contactar
-                </a>
-              </div>
-            )}
+  <div className="ml-auto text-right">
+    <a
+      href={`tel:${shelter.phone}`}
+      className="btn-primary !py-1.5 text-xs"
+    >
+      📞 Contactar
+    </a>
+    <p className="mt-1 font-mono text-xs text-mist">{shelter.phone}</p>
+  </div>
+)}
           </div>
         </div>
       </div>
