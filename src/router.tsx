@@ -11,7 +11,7 @@ import { ProtectedRoute } from './modules/shelter-dashboard/components/Protected
 import { LoginPage } from './modules/shelter-dashboard/pages/LoginPage';
 import { AnimalsInventoryPage } from './modules/shelter-dashboard/pages/AnimalsInventoryPage';
 import { ApplicationsInboxPage } from './modules/shelter-dashboard/pages/ApplicationsInboxPage';
-import { TelegramChannelPage } from './modules/shelter-dashboard/pages/TelegramChannelPage';
+
 
 export const router = createBrowserRouter([
   {
