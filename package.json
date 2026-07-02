@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -13,7 +16,7 @@
     "@supabase/supabase-js": "^2.45.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.0"
+    "react-router-dom": "^6.26.0",
     "recharts": "^2.12.7"
   },
   "devDependencies": {
@@ -27,11 +30,4 @@
     "vite": "^5.4.1",
     "vite-plugin-pwa": "^0.20.1"
   }
-}
-{
-  "name": "rescuelink",
-  "engines": {
-    "node": "20.x"
-  },
-  ...
 }
