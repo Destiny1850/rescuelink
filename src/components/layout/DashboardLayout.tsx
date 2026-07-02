@@ -5,6 +5,8 @@ const navItems = [
   { to: '/albergue', label: 'Inventario', end: true },
   { to: '/albergue/solicitudes', label: 'Solicitudes', end: false },
   { to: '/albergue/telegram', label: '📣 Telegram', end: false },
+  { to: '/albergue/estadisticas', label: '📊 Estadísticas', end: false },
+  { to: '/albergue/perfil', label: '🏠 Mi perfil', end: false },
 ];
 
 export function DashboardLayout() {

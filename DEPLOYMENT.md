@@ -148,16 +148,16 @@ supabase login
 
 ```bash
 cd rescuelink
-supabase link --project-ref <PROJECT_ID>
+supabase link --project-ref ldyurytkyvvbyhlxfeuk
 # El PROJECT_ID está en: Supabase Panel → Settings → General → Reference ID
 ```
 
 ### 5.3 Configurar los secrets (equivale a variables de entorno del servidor)
 
 ```bash
-supabase secrets set TELEGRAM_BOT_TOKEN="7123456789:AAF..."
-supabase secrets set RESEND_API_KEY="re_XXXXXXXXX"
-supabase secrets set RESEND_FROM_EMAIL="RescueLink <noreply@tudominio.com>"
+supabase secrets set TELEGRAM_BOT_TOKEN="8836111443:AAFnOErK_7g6Np0krpaKz9G6UcTXPDHovCs"
+supabase secrets set RESEND_API_KEY="re_LHo5yVpZ_NpcNkq9mXy8wFEKJgRQWu6cx"
+supabase secrets set RESEND_FROM_EMAIL="RescueLink thyescobar1993@gmail.com"
 supabase secrets set APP_URL="https://rescuelink.vercel.app"
 # APP_URL la defines después del deploy en Vercel (Paso 6)
 ```

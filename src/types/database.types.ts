@@ -1,10 +1,5 @@
 /**
  * Tipos escritos a mano para arrancar el desarrollo inmediatamente.
- *
- * IMPORTANTE: en cuanto tengas el proyecto de Supabase enlazado, reemplaza
- * este archivo ejecutando:
- *   npx supabase gen types typescript --project-id TU_PROJECT_ID > src/types/database.types.ts
- * para que quede 100% sincronizado con el schema real (incluye triggers, defaults, etc).
  */
 
 export type AnimalSpeciesEnum = 'dog' | 'cat' | 'other';
@@ -24,6 +19,12 @@ export interface Database {
           phone: string | null;
           location: string | null;
           telegram_channel_id: string | null;
+          logo_url: string | null;
+          bio: string | null;
+          instagram: string | null;
+          facebook: string | null;
+          website: string | null;
+          slug: string | null;
           created_at: string;
         };
         Insert: {
@@ -33,6 +34,12 @@ export interface Database {
           phone?: string | null;
           location?: string | null;
           telegram_channel_id?: string | null;
+          logo_url?: string | null;
+          bio?: string | null;
+          instagram?: string | null;
+          facebook?: string | null;
+          website?: string | null;
+          slug?: string | null;
         };
         Update: Partial<Database['public']['Tables']['shelters']['Insert']>;
         Relationships: [];
@@ -69,6 +76,23 @@ export interface Database {
           main_image_url?: string | null;
         };
         Update: Partial<Database['public']['Tables']['animals']['Insert']>;
+        Relationships: [];
+      };
+      animal_photos: {
+        Row: {
+          id: string;
+          animal_id: string;
+          url: string;
+          position: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          animal_id: string;
+          url: string;
+          position?: number;
+        };
+        Update: Partial<Database['public']['Tables']['animal_photos']['Insert']>;
         Relationships: [];
       };
       adoption_applications: {
@@ -117,8 +141,6 @@ export interface Database {
         Relationships: [];
       };
     };
-    // Requeridos por la inferencia genérica de @supabase/supabase-js aunque
-    // este proyecto no los use; sin ellos el cliente tipado degrada a `never`.
     Views: Record<string, never>;
     Functions: Record<string, never>;
     Enums: Record<string, never>;
@@ -126,8 +148,8 @@ export interface Database {
   };
 }
 
-// Atajos usados en toda la app (evitan repetir Database['public']['Tables'][...])
 export type Shelter = Database['public']['Tables']['shelters']['Row'];
 export type Animal = Database['public']['Tables']['animals']['Row'];
+export type AnimalPhoto = Database['public']['Tables']['animal_photos']['Row'];
 export type AdoptionApplication = Database['public']['Tables']['adoption_applications']['Row'];
 export type TelegramSubscriber = Database['public']['Tables']['telegram_subscribers']['Row'];

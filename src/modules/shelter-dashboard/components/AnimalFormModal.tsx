@@ -2,12 +2,9 @@ import { useState, type FormEvent } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import type { Animal } from '../../../types/database.types';
 import {
-  ANIMAL_SPECIES,
-  ANIMAL_SIZES,
-  SPECIES_LABELS,
-  SIZE_LABELS,
-  SUGGESTED_PERSONALITY_TAGS,
+  ANIMAL_SPECIES, ANIMAL_SIZES, SPECIES_LABELS, SIZE_LABELS, SUGGESTED_PERSONALITY_TAGS,
 } from '../../../lib/constants';
+import { PhotoGallery } from '../../../components/ui/PhotoGallery';
 
 interface AnimalFormModalProps {
   shelterId: string;
@@ -89,7 +86,7 @@ export function AnimalFormModal({ shelterId, animal, onClose, onSubmit }: Animal
         <h2 className="text-xl">{animal ? `Editar a ${animal.name}` : 'Nueva ficha de animal'}</h2>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-          {/* Foto */}
+          {/* Foto principal */}
           <div>
             <label className="label-field">Foto principal</label>
             <div className="flex items-center gap-4">
@@ -108,6 +105,19 @@ export function AnimalFormModal({ shelterId, animal, onClose, onSubmit }: Animal
             </div>
             {uploading && <p className="mt-1 text-xs text-mist">Subiendo…</p>}
           </div>
+
+          {/* Galería adicional (solo en modo edición cuando ya existe el animal) */}
+          {animal && (
+            <div>
+              <label className="label-field">Fotos adicionales</label>
+              <PhotoGallery
+                animalId={animal.id}
+                mainImageUrl={imageUrl}
+                editable={true}
+                shelterId={shelterId}
+              />
+            </div>
+          )}
 
           <div>
             <label htmlFor="name" className="label-field">Nombre</label>
