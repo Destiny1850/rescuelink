@@ -1,25 +1,12 @@
 /**
- * telegram-webhook
- * ─────────────────────────────────────────────────────────────────────────
- * Recibe updates del Bot de Telegram cuando usuarios envían /start.
- * Esta función DEBE registrarse como webhook en Telegram:
+ * telegram-webhook — versión multi-albergue
+ * Un usuario puede suscribirse a varios albergues simultáneamente.
  *
- *   curl "https://api.telegram.org/bot<TOKEN>/setWebhook" \
- *     -d "url=https://<project>.supabase.co/functions/v1/telegram-webhook"
- *
- * Comandos soportados:
- *   /start <shelter_id>  — suscribir al usuario al albergue con ese ID
- *   /stop                — cancelar suscripción
- *   /info                — ver estado de suscripción actual
- *
- * Uso típico: el dashboard del albergue muestra un link de Telegram
- * con el shelter_id como parámetro deep-link:
- *   https://t.me/<BOT_USERNAME>?start=<shelter_id>
- *
- * Variables de entorno requeridas:
- *   TELEGRAM_BOT_TOKEN        — token del bot
- *   SUPABASE_URL              — inyectada automáticamente
- *   SUPABASE_SERVICE_ROLE_KEY — inyectada automáticamente
+ * Comandos:
+ *   /start <shelter_id>  — suscribirse a un albergue
+ *   /lista               — ver todos los albergues a los que estás suscrito
+ *   /stop                — menú para desuscribirse de un albergue específico
+ *   /stop <shelter_id>   — desuscribirse directamente de un albergue
  */
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -56,9 +43,7 @@ Deno.serve(async (req) => {
   try {
     const update: TelegramUpdate = await req.json();
     const message = update.message;
-    if (!message?.text) {
-      return new Response('ok', { headers: corsHeaders });
-    }
+    if (!message?.text) return new Response('ok', { headers: corsHeaders });
 
     const chatId = message.chat.id;
     const firstName = message.chat.first_name ?? 'Amigo';
@@ -70,20 +55,19 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     );
 
-    // /start <shelter_id>  — viene del deep-link del QR/dashboard
+    // /start <shelter_id>
     if (text.startsWith('/start')) {
       const shelterId = text.split(' ')[1]?.trim() ?? null;
 
       if (!shelterId) {
         await sendMessage(botToken, chatId,
           `¡Hola ${firstName}! 🐾\n\nSoy el bot de *RescueLink*.\n` +
-          `Para suscribirte a las alertas de un albergue, escanea el código QR ` +
-          `del albergue o pídele el enlace de suscripción directa.`
+          `Escanea el código QR de un albergue para suscribirte a sus alertas.`
         );
         return new Response('ok', { headers: corsHeaders });
       }
 
-      // Verificar que el albergue existe antes de suscribir
+      // Verificar que el albergue existe
       const { data: shelter } = await supabase
         .from('shelters')
         .select('id, name')
@@ -92,65 +76,118 @@ Deno.serve(async (req) => {
 
       if (!shelter) {
         await sendMessage(botToken, chatId,
-          `❌ No encontré ese albergue. Asegúrate de usar el enlace oficial del albergue.`
+          `❌ No encontré ese albergue. Usa el enlace oficial del albergue.`
         );
         return new Response('ok', { headers: corsHeaders });
       }
 
-      // Upsert: si ya existía, actualiza el shelter_id (por si cambió)
-      const { error: upsertError } = await supabase
+      // Verificar si ya está suscrito a este albergue
+      const { data: existing } = await supabase
         .from('telegram_subscribers')
-        .upsert({ chat_id: chatId, shelter_id: shelterId }, { onConflict: 'chat_id' });
+        .select('id')
+        .eq('chat_id', chatId)
+        .eq('shelter_id', shelterId)
+        .single();
 
-      if (upsertError) throw new Error(upsertError.message);
+      if (existing) {
+        await sendMessage(botToken, chatId,
+          `ℹ️ Ya estás suscrito a *${shelter.name}*.\n` +
+          `Usa /lista para ver todos tus albergues.`
+        );
+        return new Response('ok', { headers: corsHeaders });
+      }
 
-      await sendMessage(botToken, chatId,
-        `✅ ¡Suscrito a *${shelter.name}*!\n\n` +
-        `Te avisaré cuando haya animales con adopción urgente. 🐶🐱\n` +
-        `Usa /stop para cancelar la suscripción.`
-      );
-
-    // /stop — cancelar suscripción
-    } else if (text === '/stop') {
+      // Insertar nueva suscripción
       const { error } = await supabase
         .from('telegram_subscribers')
-        .delete()
-        .eq('chat_id', chatId);
+        .insert({ chat_id: chatId, shelter_id: shelterId });
 
       if (error) throw new Error(error.message);
 
       await sendMessage(botToken, chatId,
-        `✔️ Suscripción cancelada. Ya no recibirás alertas.\n` +
-        `Si cambias de opinión, usa el enlace de tu albergue para volver a suscribirte.`
+        `✅ ¡Suscrito a *${shelter.name}*!\n\n` +
+        `Te avisaré cuando tengan animales con adopción urgente. 🐶🐱\n\n` +
+        `Usa /lista para ver todos tus albergues.\n` +
+        `Usa /stop para cancelar una suscripción.`
       );
 
-    // /info — estado actual
-    } else if (text === '/info') {
-      const { data: sub } = await supabase
+    // /lista — ver todas las suscripciones
+    } else if (text === '/lista') {
+      const { data: subs } = await supabase
         .from('telegram_subscribers')
         .select('shelter_id, shelters(name)')
-        .eq('chat_id', chatId)
-        .single();
+        .eq('chat_id', chatId);
 
-      if (!sub) {
+      if (!subs || subs.length === 0) {
         await sendMessage(botToken, chatId,
-          `ℹ️ No tienes ninguna suscripción activa.\n` +
+          `ℹ️ No tienes suscripciones activas.\n` +
           `Escanea el QR de un albergue para suscribirte.`
         );
       } else {
-        const shelterName = (sub.shelters as { name: string } | null)?.name ?? 'un albergue';
+        const lista = subs.map((s, i) => {
+          const name = (s.shelters as { name: string } | null)?.name ?? 'Albergue';
+          return `${i + 1}. *${name}*`;
+        }).join('\n');
+
         await sendMessage(botToken, chatId,
-          `ℹ️ Estás suscrito a las alertas de *${shelterName}*.\n` +
-          `Usa /stop para cancelar.`
+          `📋 *Tus albergues suscritos:*\n\n${lista}\n\n` +
+          `Usa /stop para cancelar una suscripción.`
         );
       }
 
-    // Cualquier otro mensaje
+    // /stop <shelter_id> o /stop solo
+    } else if (text.startsWith('/stop')) {
+      const shelterId = text.split(' ')[1]?.trim() ?? null;
+
+      // Si viene con shelter_id directo
+      if (shelterId) {
+        const { data: shelter } = await supabase
+          .from('shelters')
+          .select('name')
+          .eq('id', shelterId)
+          .single();
+
+        const { error } = await supabase
+          .from('telegram_subscribers')
+          .delete()
+          .eq('chat_id', chatId)
+          .eq('shelter_id', shelterId);
+
+        if (error) throw new Error(error.message);
+
+        await sendMessage(botToken, chatId,
+          `✔️ Cancelada la suscripción a *${shelter?.name ?? 'ese albergue'}*.\n` +
+          `Usa /lista para ver tus suscripciones restantes.`
+        );
+
+      } else {
+        // Mostrar lista para que elija
+        const { data: subs } = await supabase
+          .from('telegram_subscribers')
+          .select('shelter_id, shelters(name)')
+          .eq('chat_id', chatId);
+
+        if (!subs || subs.length === 0) {
+          await sendMessage(botToken, chatId,
+            `ℹ️ No tienes suscripciones activas.`
+          );
+        } else {
+          const lista = subs.map((s) => {
+            const name = (s.shelters as { name: string } | null)?.name ?? 'Albergue';
+            return `• /stop ${s.shelter_id} — *${name}*`;
+          }).join('\n');
+
+          await sendMessage(botToken, chatId,
+            `¿De cuál albergue quieres cancelar la suscripción?\n\n${lista}`
+          );
+        }
+      }
+
     } else {
       await sendMessage(botToken, chatId,
-        `No entendí ese comando.\n\nComandos disponibles:\n` +
-        `• /info — ver tu suscripción actual\n` +
-        `• /stop — cancelar suscripción`
+        `Comandos disponibles:\n\n` +
+        `• /lista — ver tus albergues suscritos\n` +
+        `• /stop — cancelar una suscripción`
       );
     }
 
@@ -158,7 +195,6 @@ Deno.serve(async (req) => {
 
   } catch (err) {
     console.error('[telegram-webhook]', err);
-    // Siempre devolvemos 200 a Telegram para que no reintente el update
     return new Response('ok', { headers: corsHeaders });
   }
 });

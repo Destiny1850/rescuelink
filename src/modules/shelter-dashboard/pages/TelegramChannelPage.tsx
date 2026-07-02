@@ -3,8 +3,8 @@ import { useAuth } from '../../../hooks/useAuth';
 import { supabase } from '../../../lib/supabaseClient';
 
 // Nombre de usuario del bot — cámbialo por el tuyo
-const BOT_USERNAME = 'rescuelink_venezuela_bot';
-
+const BOT_USERNAME = 'TU_BOT_USERNAME';
+const APP_URL = 'https://rescuelink-pearl.vercel.app';
 
 export function TelegramChannelPage() {
   const { user } = useAuth();
@@ -28,10 +28,10 @@ export function TelegramChannelPage() {
         if (data) setShelterName(data.name);
       });
 
-    // Contar suscriptores
+    // Contar suscriptores de este albergue específico
     supabase
       .from('telegram_subscribers')
-      .select('id', { count: 'exact' })
+      .select('id', { count: 'exact', head: true })
       .eq('shelter_id', user.id)
       .then(({ count }) => {
         setSubscriberCount(count ?? 0);
@@ -145,6 +145,13 @@ export function TelegramChannelPage() {
           ))}
         </ol>
       </div>
+
+      {/* Aviso si el bot no está configurado */}
+      {BOT_USERNAME === 'TU_BOT_USERNAME' && (
+        <div className="mt-4 rounded-md bg-rescue/10 px-4 py-3 text-sm text-rescue">
+          ⚠️ Recuerda reemplazar <code>TU_BOT_USERNAME</code> en el código con el username real de tu bot de Telegram.
+        </div>
+      )}
     </div>
   );
 }
