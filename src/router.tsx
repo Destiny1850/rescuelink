@@ -6,7 +6,8 @@ import { DashboardLayout } from './components/layout/DashboardLayout';
 import { CatalogPage } from './modules/public-adoption/pages/CatalogPage';
 import { AnimalDetailPage } from './modules/public-adoption/pages/AnimalDetailPage';
 import { ApplicationFormPage } from './modules/public-adoption/pages/ApplicationFormPage';
-
+import { TelegramChannelPage } from './modules/shelter-dashboard/pages/TelegramChannelPage';
+import { ProtectedRoute } from './modules/shelter-dashboard/components/ProtectedRoute';
 import { LoginPage } from './modules/shelter-dashboard/pages/LoginPage';
 import { AnimalsInventoryPage } from './modules/shelter-dashboard/pages/AnimalsInventoryPage';
 import { ApplicationsInboxPage } from './modules/shelter-dashboard/pages/ApplicationsInboxPage';

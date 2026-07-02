@@ -4,7 +4,7 @@ import { supabase } from '../../../lib/supabaseClient';
 
 // Nombre de usuario del bot — cámbialo por el tuyo
 const BOT_USERNAME = 'TU_BOT_USERNAME';
-const APP_URL = 'https://rescuelink-pearl.vercel.app';
+
 
 export function TelegramChannelPage() {
   const { user } = useAuth();
