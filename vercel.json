@@ -4,3 +4,12 @@
     { "source": "/((?!assets|icons|manifest|registerSW|sw).*)", "destination": "/index.html" }
   ]
 }
+{
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/landing", "destination": "/landing.html" },
+    { "source": "/((?!assets|icons|manifest|registerSW|sw).*)", "destination": "/index.html" }
+  ]
+}

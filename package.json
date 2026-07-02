@@ -28,3 +28,10 @@
     "vite-plugin-pwa": "^0.20.1"
   }
 }
+{
+  "name": "rescuelink",
+  "engines": {
+    "node": "20.x"
+  },
+  ...
+}
