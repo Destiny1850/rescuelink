@@ -1108,24 +1108,23 @@
 
     // Arranca cuando el hero es visible
     const heroObserver = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        // Consultar el total real de animales en la BD
-fetch(`${SUPABASE_URL}/rest/v1/animals?select=id&status=neq.adopted`, {
-  headers: {
-    'apikey': SUPABASE_ANON_KEY,
-    'Prefer': 'count=exact',
-    'Range': '0-0'
-  }
-})
-.then(res => {
-  const total = parseInt(res.headers.get('Content-Range')?.split('/')[1] || '0');
-  animateCounter(total);
-})
-.catch(() => animateCounter(0));
-        heroObserver.disconnect();
+  if (entries[0].isIntersecting) {
+    heroObserver.disconnect();
+    fetch(`${SUPABASE_URL}/rest/v1/animals?select=id&status=neq.adopted`, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Prefer': 'count=exact',
+        'Range': '0-0'
       }
-    }, { threshold: 0.3 });
-    heroObserver.observe(document.querySelector('.counter-block'));
+    })
+    .then(res => {
+      const total = parseInt(res.headers.get('Content-Range')?.split('/')[1] || '0');
+      animateCounter(total);
+    })
+    .catch(() => animateCounter(0));
+  }
+}, { threshold: 0.3 });
+heroObserver.observe(document.querySelector('.counter-block'));
 
     // ── REGISTRO DE ALBERGUE ─────────────────────────────────────
     const form = document.getElementById('register-form');
