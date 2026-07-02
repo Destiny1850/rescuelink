@@ -13,11 +13,11 @@ export function DashboardLayout() {
     <div className="min-h-screen bg-paper">
       <header className="border-b border-ink/10 bg-forest text-paper">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <span className="font-display text-lg font-semibold">RescueLink · Panel del albergue</span>
+          <a href="https://rescuelink-pearl.vercel.app/landing" className="font-display text-lg font-semibold text-paper hover:opacity-80">
+            RescueLink · Panel del albergue
+          </a>
           <div className="flex items-center gap-4 text-sm">
-            <a href="https://rescuelink-pearl.vercel.app/landing" className="font-display text-lg font-semibold text-paper hover:opacity-80">
-  RescueLink · Panel del albergue
-</a>
+            <span className="hidden text-paper/70 sm:inline">{user?.email}</span>
             <button onClick={signOut} className="rounded-md border border-paper/30 px-3 py-1.5 hover:bg-paper/10">
               Cerrar sesión
             </button>
