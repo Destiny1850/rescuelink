@@ -738,20 +738,62 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
+    .hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--paper);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.3s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+  .nav-links { 
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--night);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    z-index: 99;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { font-size: 1.2rem !important; }
+  .hamburger { display: flex; z-index: 101; }
+}
   </style>
 </head>
 <body>
 
   <!-- NAV -->
   <nav id="navbar">
-    <span class="nav-logo">RescueLink</span>
-    <ul class="nav-links">
-      <li><a href="#como-funciona">Cómo funciona</a></li>
-      <li><a href="#caracteristicas">Características</a></li>
-      <li><a href="#registro">Para albergues</a></li>
-      <a href="https://rescuelink-pearl.vercel.app/albergue/login" class="btn-nav">Ingresar</a>
-    </ul>
-  </nav>
+  <span class="nav-logo">RescueLink</span>
+  <button class="hamburger" id="hamburger" aria-label="Abrir menú">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <ul class="nav-links">
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#caracteristicas">Características</a></li>
+    <li><a href="#registro">Para albergues</a></li>
+    <a href="https://rescuelink-pearl.vercel.app/albergue/login" class="btn-nav">Ingresar</a>
+  </ul>
+</nav>
 
   <!-- HERO -->
   <section class="hero">
@@ -1227,6 +1269,20 @@ heroObserver.observe(document.querySelector('.counter-block'));
         submitBtn.textContent = 'Crear cuenta gratuita';
       }
     });
+    const hamburger = document.getElementById('hamburger');
+const navLinks = document.querySelector('.nav-links');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  });
+});
   </script>
 </body>
 </html>

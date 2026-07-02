@@ -10,7 +10,7 @@ import { ApplicationFormPage } from './modules/public-adoption/pages/Application
 import { LoginPage } from './modules/shelter-dashboard/pages/LoginPage';
 import { AnimalsInventoryPage } from './modules/shelter-dashboard/pages/AnimalsInventoryPage';
 import { ApplicationsInboxPage } from './modules/shelter-dashboard/pages/ApplicationsInboxPage';
-import { ProtectedRoute } from './modules/shelter-dashboard/components/ProtectedRoute';
+import { TelegramChannelPage } from './modules/shelter-dashboard/pages/TelegramChannelPage';
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +31,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <AnimalsInventoryPage /> },
           { path: 'solicitudes', element: <ApplicationsInboxPage /> },
+          { path: 'telegram', element: <TelegramChannelPage /> },
         ],
       },
     ],

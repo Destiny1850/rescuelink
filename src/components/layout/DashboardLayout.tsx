@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 const navItems = [
   { to: '/albergue', label: 'Inventario', end: true },
   { to: '/albergue/solicitudes', label: 'Solicitudes', end: false },
+  { to: '/albergue/telegram', label: '📣 Telegram', end: false },
 ];
 
 export function DashboardLayout() {
@@ -13,9 +14,7 @@ export function DashboardLayout() {
     <div className="min-h-screen bg-paper">
       <header className="border-b border-ink/10 bg-forest text-paper">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <a href="https://rescuelink-pearl.vercel.app/landing" className="font-display text-lg font-semibold text-paper hover:opacity-80">
-            RescueLink · Panel del albergue
-          </a>
+          <span className="font-display text-lg font-semibold">RescueLink · Panel del albergue</span>
           <div className="flex items-center gap-4 text-sm">
             <span className="hidden text-paper/70 sm:inline">{user?.email}</span>
             <button onClick={signOut} className="rounded-md border border-paper/30 px-3 py-1.5 hover:bg-paper/10">
