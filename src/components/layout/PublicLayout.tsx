@@ -5,9 +5,7 @@ export function PublicLayout() {
     <div className="min-h-screen bg-paper">
       <header className="border-b border-ink/10 bg-paper/95 backdrop-blur sticky top-0 z-30">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <Link to="/" className="font-display text-xl font-semibold text-forest">
-            RescueLink
-          </Link>
+          <span className="font-display text-lg font-semibold">RescueLink · Panel del albergue</span>
           <Link to="/albergue/login" className="text-sm font-medium text-mist hover:text-forest">
             Soy un albergue →
           </Link>

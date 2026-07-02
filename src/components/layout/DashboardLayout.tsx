@@ -15,7 +15,7 @@ export function DashboardLayout() {
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
           <span className="font-display text-lg font-semibold">RescueLink · Panel del albergue</span>
           <div className="flex items-center gap-4 text-sm">
-            <a href="https://rescuelink-pearl.vercel.app/landing" className="font-display text-lg font-semibold text-paper hover:text-paper/80">
+            <a href="/landing" className="font-display text-lg font-semibold text-paper hover:opacity-80">
   RescueLink · Panel del albergue
 </a>
             <button onClick={signOut} className="rounded-md border border-paper/30 px-3 py-1.5 hover:bg-paper/10">
