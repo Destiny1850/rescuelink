@@ -24,7 +24,7 @@ export function DashboardLayout() {
             </button>
           </div>
         </div>
-        <nav className="mx-auto flex max-w-6xl gap-1 px-4">
+        <nav className="mx-auto flex max-w-6xl gap-1 px-4 overflow-x-auto scrollbar-hide">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
