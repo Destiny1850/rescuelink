@@ -99,7 +99,11 @@ export function ApplicationFormPage() {
     // 2. Abrir WhatsApp con mensaje prearmado
     const phoneClean = shelter!.phone!.replace(/\D/g, '');
     const message = buildWhatsAppMessage(formData);
-    window.open(`https://wa.me/${phoneClean}?text=${message}`, '_blank');
+    const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+const waUrl = isMobile
+  ? `https://wa.me/${phoneClean}?text=${message}`
+  : `https://web.whatsapp.com/send?phone=${phoneClean}&text=${message}`;
+window.open(waUrl, '_blank');
 
     setShowModal(false);
   };
