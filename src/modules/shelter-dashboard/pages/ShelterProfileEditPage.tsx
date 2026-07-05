@@ -156,14 +156,20 @@ export function ShelterProfileEditPage() {
             />
           </div>
           <div>
-            <label htmlFor="phone" className="label-field">Teléfono</label>
+            <label htmlFor="phone" className="label-field">
+              WhatsApp <span className="text-rescue">*</span>
+            </label>
             <input
               id="phone"
+              required
               value={shelter.phone ?? ''}
               onChange={(e) => setShelter(prev => ({ ...prev, phone: e.target.value }))}
               className="input-field"
               placeholder="+58 414 000 0000"
             />
+            <p className="mt-1 text-xs text-mist">
+              ⚠️ Este número debe tener WhatsApp activo — los adoptantes lo usarán para contactarte.
+            </p>
           </div>
         </div>
 
